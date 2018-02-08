@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -53,6 +54,8 @@ def show_category(request, category_name_slug):
         # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context_dict)
 
+
+@login_required
 def add_category(request):
     form = CategoryForm()
 
@@ -77,6 +80,7 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 
+@login_required
 def add_page(request, category_name_slug):
 
     try:
@@ -157,14 +161,15 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return  HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('index'))
             else:
                 return HttpResponse("Your Rango account is disabled.")
         else:
             print("Invalid login details: {0}, {1}".format(username, password))
+            messages.error(request, 'Your username or password is incorrect')
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render(request, 'rango/login.html',{})
+        return render(request, 'rango/login.html', {})
 
 
 @login_required
@@ -177,4 +182,4 @@ def user_logout(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
+    return render(request, 'rango/restricted.html')
