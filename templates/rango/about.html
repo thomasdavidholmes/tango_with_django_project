@@ -8,8 +8,11 @@
         <div>
 	        <h1 class="page-header">About Page</h1>			
 	        This tutorial has been put together by Thomas
-		</div>	
+		</div>
+		<div>
+			You've visited the site on <strong>{{ visit_count }} occasion(s).</strong><br/>
 		<img src="{% static "images/abrangwa.jpg" %}" alt="Picture of Rango" />
 	<p>
 		<img src="{{MEDIA_URL}}/images/cat.jpg" alt="Picture of Django">
+		</div>
 	{% endblock %}
